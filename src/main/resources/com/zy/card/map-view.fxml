@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="MainBack" prefHeight="540.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.zy.card.MapController">
+   <children>
+      <ScrollPane fx:id="ScrollMap" layoutX="140.0" layoutY="34.0" prefHeight="510.0" prefWidth="680.0">
+         <content>
+            <AnchorPane fx:id="MapContainer" prefHeight="1200.0" prefWidth="680.0">
+
+            </AnchorPane>
+         </content></ScrollPane>
+      <AnchorPane fx:id="InfoBar" prefHeight="40.0" prefWidth="960.0">
+         <children>
+            <ImageView fx:id="ButtonSetting" fitHeight="30.0" fitWidth="30.0" layoutX="916.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true" />
+            <AnchorPane fx:id="CoinFrame" layoutX="83.0" layoutY="2.0" prefHeight="30.0" prefWidth="94.0">
+               <children>
+                  <ImageView fitHeight="36.0" fitWidth="6.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="Coin" fitHeight="23.0" fitWidth="21.0" layoutX="10.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" />
+                  <Label fx:id="CoinNumber" layoutX="15.0" layoutY="0.0" prefHeight="30.0" prefWidth="50.0" text="0" />
+               </children>
+            </AnchorPane>
+         </children></AnchorPane>
+      <ImageView fx:id="IdentiCard" fitHeight="164.0" fitWidth="222.0" layoutX="738.0" layoutY="380.0" pickOnBounds="true" preserveRatio="true" />
+   </children>
+</AnchorPane>

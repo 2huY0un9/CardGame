@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.chart.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="540.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.zy.card.HeroChooseController">
+   <children>
+      <ImageView fx:id="HeroChooseBackGround" fitHeight="546.0" fitWidth="970.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <ImageView fx:id="HeroChooseBG" fitHeight="390.0" fitWidth="295.0" layoutX="35.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="Frame" fitHeight="225.0" fitWidth="225.0" layoutX="74.0" layoutY="151.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="IntroductionBG" fitHeight="425.0" fitWidth="330.0" layoutX="621.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="ReturnImage" fitHeight="43.0" fitWidth="125.0" layoutX="35.0" layoutY="470.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="ConfirmImage" fitHeight="43.0" fitWidth="125.0" layoutX="810.0" layoutY="470.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="HeroDeplay" fitHeight="300.0" fitWidth="350.0" layoutX="290.0" layoutY="123.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="Hero1" fitHeight="70.0" fitWidth="70.0" layoutX="86.0" layoutY="165.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="Hero2" fitHeight="92.0" fitWidth="83.0" layoutX="211.0" layoutY="156.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="Hero3" fitHeight="97.0" fitWidth="85.0" layoutX="86.0" layoutY="289.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="Hero4" fitHeight="100.0" fitWidth="85.0" layoutX="208.0" layoutY="289.0" pickOnBounds="true" preserveRatio="true" />
+      <Text fx:id="SkillIntroduction" layoutX="733.0" layoutY="399.0" strokeType="OUTSIDE" strokeWidth="0.0" text="技能特性描述" />
+      <Button fx:id="HeroChooseReturn" graphicTextGap="0.0" layoutX="48.0" layoutY="469.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="125.0" AnchorPane.leftAnchor="35.0" AnchorPane.topAnchor="469.0" />
+      <Button fx:id="HeroChooseConfirm" layoutX="794.0" layoutY="469.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="125.0" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="469.0" />
+      <Button fx:id="HeroChoosebtn1" layoutX="81.0" layoutY="164.0" mnemonicParsing="false" prefHeight="70.0" prefWidth="70.0" />
+      <Button fx:id="HeroChoosebtn4" layoutX="201.0" layoutY="274.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="85.0" />
+      <Button fx:id="HeroChoosebtn3" layoutX="74.0" layoutY="276.0" mnemonicParsing="false" prefHeight="97.0" prefWidth="85.0" />
+      <Button fx:id="HeroChoosebtn2" layoutX="200.0" layoutY="149.0" mnemonicParsing="false" prefHeight="92.0" prefWidth="83.0" />
+      <Label fx:id="HeroName" layoutX="750.0" layoutY="143.0" text="Saber" textFill="#f0a107">
+         <font>
+            <Font size="21.0" />
+         </font>
+      </Label>
+      <Text fx:id="Life" fill="#d1344a" layoutX="749.0" layoutY="348.0" strokeType="OUTSIDE" strokeWidth="0.0" text="生命:90/90" wrappingWidth="158.3603515625" />
+      <TextFlow layoutX="700.0" layoutY="198.0" prefHeight="151.0" prefWidth="158.0">
+         <children>
+            <Text fx:id="Group" strokeType="OUTSIDE" strokeWidth="0.0" text=" &quot;三骑士职阶之一&quot;，又名骑士王，被称作【以剑做武器】的英雄。">
+               <font>
+                  <Font size="14.0" />
+               </font></Text>
+         </children>
+      </TextFlow>
+   </children>
+</AnchorPane>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+
+<AnchorPane fx:id="EventsMainBack" prefHeight="540.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.zy.card.EventsViewController">
+    <children>
+      <AnchorPane layoutX="109.0" layoutY="65.0" prefHeight="450.0" prefWidth="700.0">
+         <children>
+            <ImageView fx:id="EventBoxImage" fitHeight="407.0" fitWidth="665.0" layoutX="13.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" />
+            <Label layoutX="293.0" layoutY="27.0" text="事件选择" textFill="#e1de2d">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Label>
+            <Label fx:id="NameofEvent" layoutX="303.0" layoutY="78.0" text="事件名" textFill="#b21e1e">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <ImageView fx:id="PictureofEvent" layoutX="74.0" layoutY="121.0" pickOnBounds="true" preserveRatio="true" />
+            <TextFlow layoutX="375.0" layoutY="125.0" prefHeight="97.0" prefWidth="206.0">
+               <children>
+                  <Text fx:id="DetailsOfEvent" strokeType="OUTSIDE" strokeWidth="0.0" text="わたしのなか、わたしのなか、一つ、一つ、何度何度。" />
+               </children></TextFlow>
+            <Button fx:id="EventChoose1" layoutX="350.0" layoutY="220.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="240.0" />
+            <Button fx:id="EventChoose2" layoutX="350.0" layoutY="288.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="240.0" />
+         </children>
+      </AnchorPane>
+        <AnchorPane fx:id="Infobar" layoutY="-2.0" prefHeight="40.0" prefWidth="970.0">
+            <children>
+                <ImageView fx:id="Bloodgauge" fitHeight="40.0" fitWidth="200.0" layoutX="64.0" layoutY="-5.0" pickOnBounds="true" preserveRatio="true" />
+                <Button fx:id="ButtonSetting" layoutX="910.0" layoutY="-3.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="35.0" />
+                <Button fx:id="ButtonCardYouhave" layoutX="836.0" layoutY="-5.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="35.0" />
+                <Button fx:id="ButtonMap" layoutX="760.0" layoutY="-4.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="35.0" />
+            </children>
+        </AnchorPane>
+        <AnchorPane fx:id="Coin_Pane" layoutX="263.0" layoutY="-1.0" prefHeight="30.0" prefWidth="80.0">
+            <children>
+                <ImageView fx:id="Coin" fitHeight="20.0" fitWidth="20.0" layoutX="8.0" layoutY="4.0" pickOnBounds="true" preserveRatio="true" />
+                <Label fx:id="NumberofCoin" layoutX="25.0" layoutY="7.0" text="114514" textFill="WHITE" AnchorPane.rightAnchor="12.0" />
+            </children></AnchorPane>
+        <ImageView fx:id="SmallHero" fitHeight="60.0" fitWidth="60.0" layoutX="1.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true" />
+    </children>
+</AnchorPane>

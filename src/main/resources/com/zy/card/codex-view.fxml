@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="anchorPane" fx:id="anchorPane" prefHeight="500.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.zy.card.CodexController">
+   <children>
+      <ScrollPane fx:id="Scroll" prefHeight="502.0" prefWidth="500.0">
+         <content>
+            <AnchorPane fx:id="CodexPane" prefHeight="1200.0" prefWidth="485.0" />
+         </content>
+      </ScrollPane>
+   </children>
+</AnchorPane>
