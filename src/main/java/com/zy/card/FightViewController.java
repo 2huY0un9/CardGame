@@ -3,6 +3,7 @@ package com.zy.card;
 
 import com.zy.card.util.HandCards;
 import javafx.animation.AnimationTimer;
+import javafx.animation.PauseTransition;
 import javafx.animation.ScaleTransition;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -27,9 +28,12 @@ import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import static com.zy.card.Obj.MapStage;
+import static com.zy.card.Obj.allObjects;
 
 
 public class FightViewController implements Initializable {
@@ -59,10 +63,13 @@ public class FightViewController implements Initializable {
     private ImageView Bloodgauge;
     @FXML
     private ImageView SkillPointsGauge;
+    private HBox handcardsArea;
 
     private Canvas canvas = new Canvas(960,540);
     private AnimationTimer animationTimer;
     private GraphicsContext gc ;
+
+    private List<HandCards> handCardsList = new ArrayList<>();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -129,8 +136,13 @@ public class FightViewController implements Initializable {
 
         addListeners_FightView();
 
+        handcardsArea = new HBox();
+        handcardsArea.setAlignment(Pos.CENTER);
+        handcardsArea.setPrefSize(500,140);
+        handcardsArea.setLayoutY(400);
+        handcardsArea.setLayoutX(230);
 
-
+        FightMainBack.getChildren().add(handcardsArea);
     }
 
 //废案
@@ -385,12 +397,30 @@ public class FightViewController implements Initializable {
         });
 
         //点击后作出反应
-//        ButtonNextStep.setOnMouseClicked(new EventHandler<MouseEvent>() {
-//            @Override
-//            public void handle(MouseEvent mouseEvent) {
-//
-//            }
-//        });
+        ButtonNextStep.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                //回合结束
+                allObjects.getHandCardsArray().clear();
+                handcardsArea.getChildren().clear();
+                PauseTransition delay = new PauseTransition(Duration.seconds(2));
+                // 在等待时间结束后执行逻辑代码
+                delay.setOnFinished(e -> {
+
+                    allObjects.DrawCards();
+                    for (HandCards hc:allObjects.getHandCardsArray())
+                    {
+//                        hc.setLayoutX(480-allObjects.getHandCardsArray().size()*0.5*100+i*100);
+//                        hc.setLayoutY(400);
+                        if (!handcardsArea.getChildren().contains(hc)) {
+                            handcardsArea.getChildren().add(hc);
+                        }
+                    }
+                });
+                // 启动延迟
+                delay.play();
+            }
+        });
 
 
 //-------------------------------------------------------------------------------------------------------

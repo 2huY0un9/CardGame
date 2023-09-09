@@ -3,6 +3,7 @@ package com.zy.card.util;
 import javafx.animation.AnimationTimer;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
@@ -59,7 +60,7 @@ public class AllObjects {
 
     public AllObjects() {
         //创建新线程
-        calculate.run();
+        calculate.start();
         //添加初始牌组
         for (int i = 0; i < 5; i++) {
             AllHoldingCards.add(new HandCards("会心一击",1,10));
@@ -83,9 +84,14 @@ public class AllObjects {
 
     public void DrawCards(){
 
-        for (int i = 0; i < 5; i++) {
-            int index = random.nextInt(AllHoldingCards.size());
-            HandCardsArray.add(AllHoldingCards.get(index));
+        HashSet<Integer> randnum = new HashSet<>();
+        while (randnum.size() < 5)
+        {
+            randnum.add(random.nextInt(AllHoldingCards.size()));
+        }
+
+        for (int i :randnum) {
+            HandCardsArray.add(AllHoldingCards.get(i));
         }
     }
 
