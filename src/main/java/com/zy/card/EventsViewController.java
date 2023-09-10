@@ -394,6 +394,7 @@ public class EventsViewController implements Initializable {
             currentScene = scene;
             openStages.add(dialogStage);
             dialogStage.setResizable(false);
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

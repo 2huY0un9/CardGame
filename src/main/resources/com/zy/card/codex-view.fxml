@@ -2,12 +2,32 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <AnchorPane id="anchorPane" fx:id="anchorPane" prefHeight="500.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.zy.card.CodexController">
    <children>
       <ScrollPane fx:id="Scroll" prefHeight="502.0" prefWidth="500.0">
          <content>
-            <AnchorPane fx:id="CodexPane" prefHeight="1200.0" prefWidth="485.0" />
+            <AnchorPane fx:id="CodexPane" prefHeight="1200.0" prefWidth="485.0">
+               <children>
+                  <Label layoutX="31.0" layoutY="14.0" prefHeight="233.0" prefWidth="191.0" text="贞德是泥鸭，当地人叫做坤坤，一种凶恶的怪物。它来自弗雷尔卓德，一个常年被冰雪覆盖的地方。在这恶劣而残酷的环境下，逐渐进化出厚实的毛皮和锋利的爪齿，成为当地的恐怖之王。它利用变色伪装和冷血的骗术，坤坤猎杀其他生物为生，无恶不作。谁敢踏足弗雷尔卓德，都要面对坤坤的凶猛袭击。" textFill="#e75454" textOverrun="CLIP" wrapText="true">
+                     <font>
+                        <Font size="14.0" />
+                     </font></Label>
+                  <Label layoutX="31.0" layoutY="298.0" prefHeight="233.0" prefWidth="191.0" text="阿西吧门，也被战士们戏称为门酱，是一种贪婪又好吃好色的怪物。它起源于以绪塔尔，在那里它处于食物链的低端。然而，500年前，这种怪物迁移到了黄金国，并给当地居民带来了许多麻烦。阿西吧门因其贪婪的本性而对食物异常渴望，它们经常袭击农田和村庄，抢夺居民的粮食和财物。此外，它们对美色也有着不可抵挡的追求，常常引诱和骚扰人类" textFill="#e75454" wrapText="true">
+                     <font>
+                        <Font size="14.0" />
+                     </font></Label>
+                  <Label layoutX="31.0" layoutY="574.0" prefHeight="282.0" prefWidth="185.0" text="圣女兽，曾是福光岛的高级侍卫，但遭受了虚空雾霭的侵蚀，成为了强大而凶残的怪物。虚空雾霭是由福光岛国王为救妻子而引发的灾难，没有成功的救援结果。这些被侵蚀的圣女兽变得异常强大，开始对黄金国及其周边国家展开侵蚀行动，给整个地区带来巨大的痛苦。周边国家不得不面对这无法抵挡的强大敌人，寻找解决办法以应对圣女兽带来的威胁。" textFill="#e75454" wrapText="true">
+                     <font>
+                        <Font size="14.0" />
+                     </font></Label>
+                  <Label layoutX="31.0" layoutY="896.0" prefHeight="282.0" prefWidth="185.0" text="蛇发美杜莎，希腊神话中的怪物之一。她曾是美丽的女神，但因冒犯了女神雅典娜而受到惩罚。雅典娜将她的秀发变成了蛇，使她的目光能够将任何人瞬间变成石头。如今，美杜莎成为了可怕的怪物，身上满是毒蛇，注定带来灾难与恐惧。" textFill="#e75454" wrapText="true">
+                     <font>
+                        <Font size="14.0" />
+                     </font></Label>
+               </children>
+            </AnchorPane>
          </content>
       </ScrollPane>
    </children>

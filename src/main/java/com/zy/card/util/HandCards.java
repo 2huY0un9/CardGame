@@ -1,5 +1,6 @@
 package com.zy.card.util;
 
+import com.zy.card.Obj;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
 import javafx.event.EventHandler;
@@ -21,6 +22,8 @@ public class HandCards extends AnchorPane {
     private String type = "";//攻击attack，防御defence，能力ability
 
     private boolean chosen = false;
+
+    private boolean BeUsed = false;
 
     private double orgSceneX, orgSceneY;
 
@@ -101,17 +104,10 @@ public class HandCards extends AnchorPane {
         getChildren().add(text);
         getChildren().add(Content);
 
-        //鼠标事件
-        setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-
-            }
-        });
-
         setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+                Obj.allObjects.CanCardBeClick();
                 if(chosen ==false){
                     chosen =true;
                     // 创建一个缩放动画，从当前大小变为1.2倍大小，动画时长为200毫秒
@@ -256,12 +252,28 @@ public class HandCards extends AnchorPane {
         return chosen;
     }
 
+    public boolean isBeUsed() {
+        return BeUsed;
+    }
+
+    public void setBeUsed(boolean beUsed) {
+        BeUsed = beUsed;
+    }
+
     public int getValue() {
         return value;
     }
 
+    public int getCost() {
+        return cost;
+    }
+
     public String getType() {
         return type;
+    }
+
+    public String getName() {
+        return name;
     }
 
     private void setDescription(){

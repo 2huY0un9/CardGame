@@ -74,7 +74,7 @@ public class MapController implements Initializable {
                         i.setOpacity(0.5);
                 }
             }
-
+            floor = BeClicked.getFloor();
             if(!isInBattle){
                 isInBattle = true;
                 FXMLLoader fxmlLoader = new FXMLLoader(LoginController.class.getResource("fight-view.fxml"));

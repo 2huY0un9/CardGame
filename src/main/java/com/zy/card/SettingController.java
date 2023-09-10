@@ -76,6 +76,7 @@ public class SettingController extends SettingButton implements Initializable {
         HelloApplication.Exit.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+
                 Platform.exit(); // 关闭整个程序
             }
         });

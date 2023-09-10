@@ -1,11 +1,15 @@
 package com.zy.card;
 
 import com.zy.card.util.AllObjects;
+import com.zy.card.util.Hero;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 
 public class Obj {
     public static AllObjects allObjects = new AllObjects();
+
+    public static Hero hero = allObjects.getHero();
+    public static int floor;
 
     public static boolean isInBattle = false;
 

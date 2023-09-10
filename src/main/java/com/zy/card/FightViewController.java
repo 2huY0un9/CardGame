@@ -16,6 +16,7 @@ import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -32,10 +33,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.ResourceBundle;
 
-import static com.zy.card.Obj.MapStage;
-import static com.zy.card.Obj.allObjects;
+import static com.zy.card.Obj.*;
 
 
 public class FightViewController implements Initializable {
@@ -64,9 +65,13 @@ public class FightViewController implements Initializable {
     @FXML
     private ImageView Bloodgauge;
     @FXML
-    private ImageView SkillPointsGauge;
+    private AnchorPane SkillPointsGauge;
     private HBox handcardsArea;
     private HBox enemyArea;
+    @FXML
+    private Button ButtonAction;
+    @FXML
+    private Label ActionPoint;
 
     private Scene currentScene = null;
 
@@ -75,6 +80,7 @@ public class FightViewController implements Initializable {
     private Canvas canvas = new Canvas(960,540);
     private AnimationTimer animationTimer;
     private GraphicsContext gc ;
+    private Random random = new Random();
 
     private List<HandCards> handCardsList = new ArrayList<>();
 
@@ -104,8 +110,12 @@ public class FightViewController implements Initializable {
         Image smallHero = new Image(getClass().getResourceAsStream("res/Image/SmallHero.png"),60,60,false,true);
         SmallHero.setImage(smallHero);
 
-        Image skillpointsgauge = new Image(getClass().getResourceAsStream("res/Image/SkillPoints.png"),80,84,false,true);
-        SkillPointsGauge.setImage(skillpointsgauge);
+        Image skillpointsgauge = new Image(getClass().getResourceAsStream("res/Image/SkillPoints.png"),65,65,false,true);
+        BackgroundImage skillptimg = new BackgroundImage(skillpointsgauge,BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.CENTER,null);
+        SkillPointsGauge.setBackground(new Background(skillptimg));
+
+        ActionPoint.setText(" "+String.valueOf(allObjects.getActionPoint()) + "/" +allObjects.getMax_ActionPoint());
+        ActionPoint.setStyle("-fx-text-fill: white;");
 
         Image ButtonNextStep01 = new Image(getClass().getResourceAsStream("res/Image/ButtonNextStep.png"),100,40,false,true);
         BackgroundImage buttonnextStep001 = new BackgroundImage(ButtonNextStep01,BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.DEFAULT,null);
@@ -115,6 +125,11 @@ public class FightViewController implements Initializable {
         ButtonNextStep.setAlignment(Pos.CENTER);
         ButtonNextStep.setStyle("-fx-text-fill: white;");
 
+        ButtonAction.setText("行动");
+        ButtonAction.setStyle("-fx-background-color: transparent;");
+        ButtonAction.setBackground(new Background(buttonnextStep001));
+        ButtonAction.setAlignment(Pos.CENTER);
+        ButtonAction.setStyle("-fx-text-fill: white;");
 
         Image ButtonSetting01 = new Image(getClass().getResourceAsStream("res/Image/setting.png"),31,31,false,true);
         ImageView ButtonSetting02 = new ImageView(ButtonSetting01);
@@ -145,25 +160,59 @@ public class FightViewController implements Initializable {
 
         handcardsArea = new HBox();
         handcardsArea.setAlignment(Pos.CENTER);
-        handcardsArea.setPrefSize(500,140);
-        handcardsArea.setLayoutY(400);
-        handcardsArea.setLayoutX(230);
+        handcardsArea.setPrefSize(500,100);
+        handcardsArea.setLayoutY(380);
+        handcardsArea.setLayoutX(210);
+        handcardsArea.setSpacing(5);
+
+        enemyArea = new HBox();
+        enemyArea.setSpacing(100);
+        enemyArea.setAlignment(Pos.CENTER);
+        enemyArea.setPrefSize(200,150);
+        enemyArea.setLayoutY(130);
+        enemyArea.setLayoutX(650);
+
+
 
         FightMainBack.getChildren().add(handcardsArea);
+        FightMainBack.getChildren().add(enemyArea);
+
+        //初始化enemy
+        allObjects.DrawEnemy();
+        enemyArea.getChildren().add(allObjects.getEnemy());
+
+        //初始化手牌
+        allObjects.DrawCards();
+        for (HandCards hc:allObjects.getHandCardsArray())
+        {
+//                        hc.setLayoutX(480-allObjects.getHandCardsArray().size()*0.5*100+i*100);
+//                        hc.setLayoutY(400);
+            if (!handcardsArea.getChildren().contains(hc)) {
+                handcardsArea.getChildren().add(hc);
+            }
+        }
+
+        //放入Hero
+        FightMainBack.getChildren().add(hero);
+
+
+        animationTimer = new AnimationTimer() {
+            @Override
+            public void handle(long l) {
+                for (HandCards hc:allObjects.getHandCardsArray())
+                {
+
+                    if (handcardsArea.getChildren().contains(hc)&&hc.isBeUsed()) {
+                        handcardsArea.getChildren().remove(hc);
+                    }
+                }
+
+            }
+        };
+        animationTimer.start();
     }
 
-//废案
-//    public void DrawHandCards(){
-//        SnapshotParameters pic = new SnapshotParameters();
-//        pic.setFill(Color.TRANSPARENT);
-//        int i=0;
-//        int size = Obj.allObjects.getHandCardsArray().size();
-//        for (HandCards hc:Obj.allObjects.getHandCardsArray()){
-//            WritableImage img = hc.snapshot(pic,null);
-//            gc.drawImage(img,480-(size*0.5)*100+i*100,380);
-//            i++;
-//        }
-//    }
+
 
     public void addListeners_FightView(){
 
@@ -415,13 +464,14 @@ public class FightViewController implements Initializable {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 //回合结束
-                allObjects.getHandCardsArray().clear();
+                allObjects.RoundEnd();
+                allObjects.setActionPoint(allObjects.getMax_ActionPoint());
+                ActionPoint.setText(" "+String.valueOf(allObjects.getActionPoint()) + "/" +allObjects.getMax_ActionPoint());
                 handcardsArea.getChildren().clear();
                 PauseTransition delay = new PauseTransition(Duration.seconds(2));
                 // 在等待时间结束后执行逻辑代码
                 delay.setOnFinished(e -> {
 
-                    allObjects.DrawCards();
                     for (HandCards hc:allObjects.getHandCardsArray())
                     {
 //                        hc.setLayoutX(480-allObjects.getHandCardsArray().size()*0.5*100+i*100);
@@ -438,6 +488,79 @@ public class FightViewController implements Initializable {
 
 
 //-------------------------------------------------------------------------------------------------------
+        ButtonAction.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                ButtonAction.setEffect(new DropShadow());
+            }
+        });
+        ButtonAction.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                ButtonAction.setEffect(null);
+            }
+        });
+        ButtonAction.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(100),ButtonAction);
+                scaleTransition.setToX(0.8);
+                scaleTransition.setToY(0.8);
+                scaleTransition.play();
+            }
+        });
+        ButtonAction.setOnMouseReleased(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(100),ButtonAction);
+                scaleTransition.setToX(1.0);
+                scaleTransition.setToY(1.0);
+                scaleTransition.play();
+            }
+        });
+
+        ButtonAction.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                int value = 0;
+                String Cardtype = "";
+                int Cost = 0;
+                for(HandCards hc:allObjects.getHandCardsArray())
+                {
+                    if(hc.isChosen())
+                    {
+                        value = hc.getValue();
+                        Cardtype = hc.getType();
+                        Cost = hc.getCost();
+
+                        if(allObjects.getActionPoint()-Cost < 0)
+                        {
+
+                        }else {
+                            allObjects.setActionPoint(allObjects.getActionPoint()-Cost);
+                            ActionPoint.setText(" "+String.valueOf(allObjects.getActionPoint()) + "/" +allObjects.getMax_ActionPoint());
+                            switch (Cardtype){
+                                case "Attack":{
+                                    allObjects.getHero().Heroattack();
+                                    allObjects.getEnemy().GotHit(value);
+                                    if(allObjects.getEnemy().getHP()<=0)
+                                    {
+                                        allObjects.getEnemy().dead();
+                                    }
+                                    break;
+                                }
+                            }
+                            allObjects.getHandCardsArray().remove(hc);
+                            break;
+                        }
+
+                    }
+                }
+
+                updateHandCards();
+
+            }
+        });
 
     }
 
@@ -481,6 +604,13 @@ public class FightViewController implements Initializable {
             dialogStage.setResizable(false);
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private void updateHandCards(){
+        handcardsArea.getChildren().clear();
+        for (HandCards i:allObjects.getHandCardsArray()){
+            handcardsArea.getChildren().add(i);
         }
     }
 

@@ -2,72 +2,38 @@ package com.zy.card.util;
 
 import javafx.animation.AnimationTimer;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+
+import static com.zy.card.Obj.allObjects;
+import static com.zy.card.Obj.floor;
 
 public class AllObjects {
 
     private List<HandCards> HandCardsArray = new ArrayList<>();
-    private List<Enemy> EnemyArray = new ArrayList<>();
+    private List<Enemy>     EnemyArray = new ArrayList<>();
     private List<HandCards> AllHoldingCards = new ArrayList<>();
 
+    private Enemy enemy;
     private Hero hero;
     private int Energy;
-    private int Drawn = 3;
-    private Random random = new Random();
-    private Thread calculate = new Thread(new Runnable() {
-        @Override
-        public void run() {
-            String type="";
-            int value = 0;
-            for(HandCards hc:HandCardsArray){
-                if(hc.isChosen()) {
-                    value = hc.getValue();
-                    type = hc.getType();
-                    break;
-                }
-            }
-            for (Enemy Em:EnemyArray){
-                if (Em.isChosen()){
-                    switch (type){
-                        case "Attack":{
-                            if(Em.getShield()-value<0)
-                            {
-                                Em.setHP(Em.getHP()+Em.getShield()-value);
-                                if(Em.getHP()<0)
-                                {
-                                    Em.dead();
-                                    EnemyArray.remove(Em);
-                                    Em = null;
-                                }
-                            }else{
-                                Em.setShield(Em.getShield()-value);
-                            }
-                            break;
-                        }
-                    }
-                }
-            }
+    private int Drawn = 3;//每回合抽牌数
 
-        }
-    });
+    private int ActionPoint = 3;
+
+    private  int Max_ActionPoint = 3;
+
+    private boolean isOneCardBeChosen;
+    private Random random = new Random();
+
 
     public void setHero(Hero hero) {
         this.hero = hero;
     }
 
     public AllObjects() {
-        //创建新线程
-        calculate.start();
-        //添加初始牌组
-        for (int i = 0; i < 5; i++) {
-            AllHoldingCards.add(new HandCards("会心一击",1,10));
-        }
-        for (int i = 0; i < 5; i++) {
-            AllHoldingCards.add(new HandCards("防御",1,5));
-        }
+        InitHandCards();
+        InitEnemy();
+        InitHero();
     }
 
     public List<HandCards> getHandCardsArray() {
@@ -82,6 +48,12 @@ public class AllObjects {
         return AllHoldingCards;
     }
 
+    public Hero getHero() { return hero; }
+
+    public Enemy getEnemy() {
+        return enemy;
+    }
+
     public void DrawCards(){
 
         HashSet<Integer> randnum = new HashSet<>();
@@ -91,13 +63,82 @@ public class AllObjects {
         }
 
         for (int i :randnum) {
-            HandCardsArray.add(AllHoldingCards.get(i));
+            HandCards c =AllHoldingCards.get(i);
+            HandCardsArray.add(new HandCards(c.getName(),c.getCost(),c.getValue()));
         }
     }
 
+    public void InitEnemy(){
+        EnemyArray.add(new Enemy("1",80));
+        EnemyArray.add(new Enemy("2",60));
+        EnemyArray.add(new Enemy("3",70));
+        EnemyArray.add(new Enemy("4",90));
+    }
 
-    private void RoundEnd(){
+    public void DrawEnemy(){
+        int index = random.nextInt(allObjects.getEnemyArray().size());
+        enemy = new Enemy(String.valueOf(index+1),60+floor*20);
+    }
+    public void InitHandCards(){
+        //添加初始牌组
+        for (int i = 0; i < 5; i++) {
+            AllHoldingCards.add(new HandCards("会心一击",1,10));
+        }
+        for (int i = 0; i < 5; i++) {
+            AllHoldingCards.add(new HandCards("防御",1,5));
+        }
+    }
+
+    public void InitHero(){
+        hero = new Hero();
+    }
+
+
+    public void CanCardBeClick(){
+        for(HandCards hc:HandCardsArray){
+            if(hc.isChosen()) {
+                isOneCardBeChosen = true;
+                break;
+            }
+            isOneCardBeChosen = false;
+        }
+        if(isOneCardBeChosen)
+        {
+            for(HandCards i:HandCardsArray)
+            {
+                if(!i.isChosen())
+                {
+                    i.setMouseTransparent(true); //当一张手牌被选择时其他手牌被禁止点击
+                }
+            }
+        }else {
+            for(HandCards i:HandCardsArray)
+            {
+                if(!i.isChosen())
+                {
+                    i.setMouseTransparent(false);
+                }
+            }
+        }
+    }
+
+    public int getActionPoint() {
+        return ActionPoint;
+    }
+
+    public int getMax_ActionPoint() {
+        return Max_ActionPoint;
+    }
+
+    public void setActionPoint(int actionPoint) {
+        ActionPoint = actionPoint;
+    }
+
+    public void RoundEnd(){
+        ActionPoint = Max_ActionPoint;
+        enemy.Action();
         HandCardsArray.clear();
+        DrawCards();
         Energy = 3;
     }
 
