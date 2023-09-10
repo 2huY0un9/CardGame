@@ -1,10 +1,13 @@
 package com.zy.card;
 
 import javafx.animation.ScaleTransition;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
@@ -16,9 +19,14 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Scale;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
+import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class EventsViewController implements Initializable {
@@ -53,6 +61,10 @@ public class EventsViewController implements Initializable {
     private ImageView Coin;
     @FXML
     private ImageView Bloodgauge;
+
+    private List<Stage> openStages = new ArrayList<>();
+
+    private Scene currentScene = null;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -327,5 +339,63 @@ public class EventsViewController implements Initializable {
 //
 //     }
 // });
+        //--------------------------------------------------------------------------------------------------------------
+
+        ButtonSetting.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                if (currentScene != null) {
+                    // 如果当前存在 Scene，关闭它并设置为 null
+                    closeScene(currentScene);
+                    currentScene = null;
+                } else {
+                    // 如果当前没有 Scene，创建一个新的 Scene 并打开它
+                    openScene();
+                }
+            }
+        });
+    }
+
+    private void closeScene (Scene scene){
+        if (scene != null) {
+            Stage stage = (Stage) scene.getWindow();
+            stage.close();
+        }
+    }
+
+    private void openScene () {
+        FXMLLoader fxmlLoader = new FXMLLoader(LoginController.class.getResource("setting-view.fxml"));
+        AnchorPane settingPane = null;
+        try {
+            settingPane = fxmlLoader.load();
+            settingPane.setScaleX(0);
+            settingPane.setScaleY(0);
+
+            ScaleTransition scaleIn = new ScaleTransition(Duration.seconds(0.5), settingPane);
+            scaleIn.setToX(1);
+            scaleIn.setToY(1);
+            scaleIn.play();
+
+            // 创建一个透明的场景，包含缩放后的内容
+            Scene scene = new Scene(settingPane, Color.TRANSPARENT);
+
+            // 创建一个透明的窗口
+            Stage dialogStage = new Stage(StageStyle.TRANSPARENT);
+            dialogStage.setScene(scene);
+            dialogStage.setTitle("Setting");
+
+            // 设置关闭按钮的处理程序，关闭 Scene 并将 currentScene 设置为 null
+            dialogStage.setOnCloseRequest(event -> {
+                closeScene(scene);
+                currentScene = null;
+            });
+
+            dialogStage.show();
+            currentScene = scene;
+            openStages.add(dialogStage);
+            dialogStage.setResizable(false);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

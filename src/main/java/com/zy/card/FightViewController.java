@@ -5,6 +5,7 @@ import com.zy.card.util.HandCards;
 import javafx.animation.AnimationTimer;
 import javafx.animation.PauseTransition;
 import javafx.animation.ScaleTransition;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -24,6 +25,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 import java.io.IOException;
@@ -64,6 +66,11 @@ public class FightViewController implements Initializable {
     @FXML
     private ImageView SkillPointsGauge;
     private HBox handcardsArea;
+    private HBox enemyArea;
+
+    private Scene currentScene = null;
+
+    private List<Stage> openStages = new ArrayList<>();
 
     private Canvas canvas = new Canvas(960,540);
     private AnimationTimer animationTimer;
@@ -234,12 +241,19 @@ public class FightViewController implements Initializable {
         });
 
         //点击后作出反应
-//        ButtonSetting.setOnMouseClicked(new EventHandler<MouseEvent>() {
-//            @Override
-//            public void handle(MouseEvent mouseEvent) {
-//
-//            }
-//        });
+        ButtonSetting.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                if (currentScene != null) {
+                    // 如果当前存在 Scene，关闭它并设置为 null
+                    closeScene(currentScene);
+                    currentScene = null;
+                } else {
+                    // 如果当前没有 Scene，创建一个新的 Scene 并打开它
+                    openScene();
+                }
+            }
+        });
 
 //-------------------------------------------------------------------------------------------------------
         ButtonCardYouhave.setOnMouseEntered(new EventHandler<MouseEvent>() {
@@ -425,6 +439,49 @@ public class FightViewController implements Initializable {
 
 //-------------------------------------------------------------------------------------------------------
 
+    }
+
+    private void closeScene(Scene scene) {
+        if (scene != null) {
+            Stage stage = (Stage) scene.getWindow();
+            stage.close();
+        }
+    }
+
+    private void openScene() {
+        FXMLLoader fxmlLoader = new FXMLLoader(LoginController.class.getResource("setting-view.fxml"));
+        AnchorPane settingPane = null;
+        try {
+            settingPane = fxmlLoader.load();
+            settingPane.setScaleX(0);
+            settingPane.setScaleY(0);
+
+            ScaleTransition scaleIn = new ScaleTransition(Duration.seconds(0.5), settingPane);
+            scaleIn.setToX(1);
+            scaleIn.setToY(1);
+            scaleIn.play();
+
+            // 创建一个透明的场景，包含缩放后的内容
+            Scene scene = new Scene(settingPane, Color.TRANSPARENT);
+
+            // 创建一个透明的窗口
+            Stage dialogStage = new Stage(StageStyle.TRANSPARENT);
+            dialogStage.setScene(scene);
+            dialogStage.setTitle("Setting");
+
+            // 设置关闭按钮的处理程序，关闭 Scene 并将 currentScene 设置为 null
+            dialogStage.setOnCloseRequest(event -> {
+                closeScene(scene);
+                currentScene = null;
+            });
+
+            dialogStage.show();
+            currentScene = scene;
+            openStages.add(dialogStage);
+            dialogStage.setResizable(false);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

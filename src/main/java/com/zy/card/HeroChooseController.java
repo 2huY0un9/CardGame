@@ -1,5 +1,6 @@
 package com.zy.card;
 
+import com.zy.card.util.MusicPlayer;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -271,9 +272,7 @@ public class HeroChooseController implements Initializable {
             Scene scene = new Scene(root);
             Stage LoginStage = new Stage();
             LoginStage.setScene(scene);
-
-
-
+            MusicPlayer.stopMusic();
             LoginStage.show();
         } catch (IOException e) {
             throw new RuntimeException(e);

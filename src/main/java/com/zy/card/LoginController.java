@@ -1,5 +1,6 @@
 package com.zy.card;
 
+import com.zy.card.util.MusicPlayer;
 import javafx.animation.ScaleTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -46,6 +47,9 @@ public class LoginController implements Initializable {
         // 加载字体文件
         String fontPath = "/com/zy/card/res/Font/spider.ttf"; // 注意路径格式
         title.setImage(BossIconImage);
+
+
+        MusicPlayer.playMusic(MusicPlayer.BGM);
 
         CardGameButton codex = new CardGameButton("Codex");
         // 添加cardGameButton到AnchorPane
