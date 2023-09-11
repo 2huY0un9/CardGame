@@ -2,6 +2,7 @@ package com.zy.card;
 
 
 import com.zy.card.util.HandCards;
+import com.zy.card.util.PlaySound;
 import javafx.animation.AnimationTimer;
 import javafx.animation.PauseTransition;
 import javafx.animation.ScaleTransition;
@@ -178,7 +179,6 @@ public class FightViewController implements Initializable {
         FightMainBack.getChildren().add(enemyArea);
 
         //初始化enemy
-        allObjects.DrawEnemy();
         enemyArea.getChildren().add(allObjects.getEnemy());
 
         //初始化手牌
@@ -483,6 +483,7 @@ public class FightViewController implements Initializable {
                 });
                 // 启动延迟
                 delay.play();
+                allObjects.getEnemy().finalbuff();
             }
         });
 
@@ -504,8 +505,8 @@ public class FightViewController implements Initializable {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(100),ButtonAction);
-                scaleTransition.setToX(0.8);
-                scaleTransition.setToY(0.8);
+                scaleTransition.setToX(0.9);
+                scaleTransition.setToY(0.9);
                 scaleTransition.play();
             }
         });
@@ -522,8 +523,11 @@ public class FightViewController implements Initializable {
         ButtonAction.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+                if(HelloApplication.Sound_music.isSelected()){
+                    PlaySound.playMusic();}
                 int value = 0;
                 String Cardtype = "";
+                String Cardname = "";
                 int Cost = 0;
                 for(HandCards hc:allObjects.getHandCardsArray())
                 {
@@ -532,6 +536,7 @@ public class FightViewController implements Initializable {
                         value = hc.getValue();
                         Cardtype = hc.getType();
                         Cost = hc.getCost();
+                        Cardname = hc.getName();
 
                         if(allObjects.getActionPoint()-Cost < 0)
                         {
@@ -541,15 +546,47 @@ public class FightViewController implements Initializable {
                             ActionPoint.setText(" "+String.valueOf(allObjects.getActionPoint()) + "/" +allObjects.getMax_ActionPoint());
                             switch (Cardtype){
                                 case "Attack":{
-                                    allObjects.getHero().Heroattack();
+                                    if(Cardname=="巫妖之祸")
+                                    {
+                                        allObjects.getHero().Heroattack2();
+                                    }else {
+                                        allObjects.getHero().Heroattack();
+                                    }
                                     allObjects.getEnemy().GotHit(value);
                                     if(allObjects.getEnemy().getHP()<=0)
                                     {
                                         allObjects.getEnemy().dead();
                                     }
+                                    if(Cardname=="饮血剑")
+                                    {
+                                        allObjects.getHero().HeroFit();
+                                        if(allObjects.getHero().getHP()+value>=allObjects.getHero().getMAX_HP())
+                                        {
+                                            allObjects.getHero().setHP(allObjects.getHero().getMAX_HP());
+                                        }else{
+                                            allObjects.getHero().setHP(allObjects.getHero().getHP()+value);
+                                        }
+                                    }
                                     break;
                                 }
+                                case "Defence":{
+                                    allObjects.getHero().HeroDenfend();
+                                    allObjects.getHero().setShield(value);
+                                    break;
+                                }
+                                case "Buff":{
+                                    allObjects.getEnemy().GotDeBuff();
+                                    if(Cardname=="虚弱")
+                                    {
+                                        allObjects.getEnemy().setAttack(allObjects.getEnemy().getAttack()-3);
+                                    }
+                                    if (Cardname=="点燃")
+                                    {
+                                        allObjects.getEnemy().addbufflsit("点燃");
+                                    }
+                                }
                             }
+
                             allObjects.getHandCardsArray().remove(hc);
                             break;
                         }

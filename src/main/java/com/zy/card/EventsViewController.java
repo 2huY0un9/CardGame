@@ -1,5 +1,7 @@
 package com.zy.card;
 
+import com.zy.card.util.HandCards;
+import com.zy.card.util.PlaySound;
 import javafx.animation.ScaleTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -28,6 +30,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import static com.zy.card.Obj.*;
 
 public class EventsViewController implements Initializable {
     @FXML
@@ -78,7 +82,7 @@ public class EventsViewController implements Initializable {
         Background Infobar03 = new Background(Infobar02);
         Infobar.setBackground(Infobar03);
 
-        Image pictureofevent = new Image(getClass().getResourceAsStream("res/Image/TestChooseBG.png"),200,200,false,true);
+        Image pictureofevent = new Image(getClass().getResourceAsStream("res/Image/奥恩煅炉.png"),200,200,false,true);
         PictureofEvent.setImage(pictureofevent);
 
         Image EventChooseButton01 = new Image(getClass().getResourceAsStream("res/Image/EventChooseButton.png"),240,36,false,true);
@@ -89,16 +93,19 @@ public class EventsViewController implements Initializable {
         EventChoose1.setAlignment(Pos.CENTER);
         EventChoose2.setAlignment(Pos.CENTER);
 
-        EventChoose1.setText("dsf;kjdslkfjlskjflkjal");
+        EventChoose1.setText("随机获得一张强大的手牌");
         EventChoose1.setStyle("-fx-text-fill: red;");
-        EventChoose2.setText("fdsfdsfds");
+        EventChoose2.setText("回复30点血量");
         EventChoose2.setStyle("-fx-text-fill: green;");
 
 
-        Color backgroundColor = Color.BLACK;
-        BackgroundFill backgroundFill = new BackgroundFill(backgroundColor, null, null);
-        Background blackBackground = new Background(backgroundFill);
-        EventsMainBack.setBackground(blackBackground);
+        Image MapBackground = new Image(getClass().getResourceAsStream("/com/zy/card/res/Image/inhabit_back.png"),960,540,false,false);
+        BackgroundImage mapBack = new BackgroundImage(MapBackground,
+                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.DEFAULT, new BackgroundSize(100, 100, true, true, true, true));
+
+        Background mapback = new Background(mapBack);
+        EventsMainBack.setBackground(mapback);
 
         Image eventboximage =new Image(getClass().getResourceAsStream("res/Image/EventBox.png"),665,407,false,true);
         EventBoxImage.setImage(eventboximage);
@@ -150,8 +157,8 @@ public class EventsViewController implements Initializable {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(100),ButtonMap);
-                scaleTransition.setToX(0.8);
-                scaleTransition.setToY(0.8);
+                scaleTransition.setToX(0.9);
+                scaleTransition.setToY(0.9);
                 scaleTransition.play();
             }
         });
@@ -189,8 +196,8 @@ public class EventsViewController implements Initializable {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(100),ButtonSetting);
-                scaleTransition.setToX(0.8);
-                scaleTransition.setToY(0.8);
+                scaleTransition.setToX(0.9);
+                scaleTransition.setToY(0.9);
                 scaleTransition.play();
             }
         });
@@ -229,8 +236,8 @@ public class EventsViewController implements Initializable {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(100),ButtonCardYouhave);
-                scaleTransition.setToX(0.8);
-                scaleTransition.setToY(0.8);
+                scaleTransition.setToX(0.9);
+                scaleTransition.setToY(0.9);
                 scaleTransition.play();
             }
         });
@@ -271,9 +278,11 @@ public class EventsViewController implements Initializable {
         EventChoose1.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
+                if(HelloApplication.Sound_music.isSelected()){
+                    PlaySound.playMusic();}
                 ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(100), EventChoose1);
-                scaleTransition.setToX(0.8);
-                scaleTransition.setToY(0.8);
+                scaleTransition.setToX(0.9);
+                scaleTransition.setToY(0.9);
                 scaleTransition.play();
             }
         });
@@ -288,13 +297,15 @@ public class EventsViewController implements Initializable {
             }
         });
 
-// 点击后作出反应
-// EventChoose1.setOnMouseClicked(new EventHandler<MouseEvent>() {
-//     @Override
-//     public void handle(MouseEvent mouseEvent) {
-//
-//     }
-// });
+         //点击后作出反应
+         EventChoose1.setOnMouseClicked(new EventHandler<MouseEvent>() {
+             @Override
+             public void handle(MouseEvent mouseEvent) {
+                EventStage.close();
+                MapStage.show();
+                allObjects.getAllHoldingCards().add(new HandCards("巫妖之祸",2,40));
+             }
+         });
 
         //--------------------------------------------------------------------------------------------------------------
 
@@ -315,9 +326,11 @@ public class EventsViewController implements Initializable {
         EventChoose2.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
+                if(HelloApplication.Sound_music.isSelected()){
+                    PlaySound.playMusic();}
                 ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(100), EventChoose2);
-                scaleTransition.setToX(0.8);
-                scaleTransition.setToY(0.8);
+                scaleTransition.setToX(0.9);
+                scaleTransition.setToY(0.9);
                 scaleTransition.play();
             }
         });
@@ -333,12 +346,19 @@ public class EventsViewController implements Initializable {
         });
 
 // 点击后作出反应
-// EventChoose2.setOnMouseClicked(new EventHandler<MouseEvent>() {
-//     @Override
-//     public void handle(MouseEvent mouseEvent) {
-//
-//     }
-// });
+         EventChoose2.setOnMouseClicked(new EventHandler<MouseEvent>() {
+             @Override
+             public void handle(MouseEvent mouseEvent) {
+                 EventStage.close();
+                 MapStage.show();
+                 if(allObjects.getHero().getHP()+30>=allObjects.getHero().getMAX_HP())
+                 {
+                     allObjects.getHero().setHP(allObjects.getHero().getMAX_HP());
+                 }else{
+                     allObjects.getHero().setHP(allObjects.getHero().getHP()+30);
+                 }
+             }
+         });
         //--------------------------------------------------------------------------------------------------------------
 
         ButtonSetting.setOnAction(new EventHandler<ActionEvent>() {

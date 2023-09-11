@@ -23,8 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static com.zy.card.Obj.MapStage;
-import static com.zy.card.Obj.RestStage;
+import static com.zy.card.Obj.*;
 
 
 public class InhabitController implements Initializable {
@@ -96,7 +95,13 @@ public class InhabitController implements Initializable {
             RestStage.close();
             MapStage.show();
             RestStage=null;
-            //还没写逻辑代码
+            //回复15点血量
+            if(allObjects.getHero().getHP()+15>=allObjects.getHero().getMAX_HP())
+            {
+                allObjects.getHero().setHP(allObjects.getHero().getMAX_HP());
+            }else{
+                allObjects.getHero().setHP(allObjects.getHero().getHP()+15);
+            }
 
         });
 
@@ -104,7 +109,8 @@ public class InhabitController implements Initializable {
             RestStage.close();
             MapStage.show();
             RestStage=null;
-            //还没写逻辑代码
+            //最大战技点加一
+            allObjects.setMax_ActionPoint(allObjects.getMax_ActionPoint()+1);
 
         });
         setting.setOnAction(new EventHandler<ActionEvent>() {

@@ -292,6 +292,31 @@ public class HandCards extends AnchorPane {
                 type = "Defence";
                 break;
             }
+            case "点燃":{
+                description = "使敌人在每回合结束时损失" + value +"点生命";
+                type = "Buff";
+                break;
+            }
+            case "虚弱":{
+                description = "使敌人的攻击力略微减少";
+                type = "Buff";
+                break;
+            }
+            case "饮血剑":{
+                description = "对敌人造成" + value +"点伤害，并为自身回复"+ value +"点生命";
+                type = "Attack";
+                break;
+            }
+            case "巫妖之祸":{
+                description = "对敌人造成"+value+"点巨量伤害";
+                type = "Attack";
+                break;
+            }
+            default:{
+                description = "";
+                type = "";
+                break;
+            }
         }
     }
 

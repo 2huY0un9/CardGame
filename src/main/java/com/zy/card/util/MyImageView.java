@@ -5,7 +5,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class MyImageView extends ImageView {
-    private boolean Clickable;
+    private boolean Clickable = false;
     private int mark;
 
     private int floor;
@@ -29,6 +29,14 @@ public class MyImageView extends ImageView {
         return mark;
     }
 
+    public void setClickable(boolean clickable) {
+        Clickable = clickable;
+    }
+
+    public boolean isClickable() {
+        return Clickable;
+    }
+
     public void setFloor(int floor) {
         this.floor = floor;
     }
@@ -38,12 +46,10 @@ public class MyImageView extends ImageView {
     }
 
     public void Disable(){
-        Clickable = false;
         setMouseTransparent(true);
     }
 
     public void able(){
-        Clickable = true;
         setMouseTransparent(false);
     }
 }

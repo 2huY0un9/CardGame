@@ -1,10 +1,13 @@
 package com.zy.card.util;
 
+import com.zy.card.LoserController;
 import com.zy.card.Obj;
 import javafx.animation.AnimationTimer;
 import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
 import javafx.animation.TranslateTransition;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.effect.BlendMode;
@@ -12,9 +15,14 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.IOException;
 import java.util.ArrayList;
+
+import static com.zy.card.Obj.*;
+import static com.zy.card.Obj.RestStage;
 
 public class Hero extends AnchorPane {
 
@@ -93,7 +101,87 @@ public class Hero extends AnchorPane {
             moveBackward.play();
         });
 
+        ImageView hit = new ImageView(new Image(getClass().getResourceAsStream("/com/zy/card/res/Image/EffectImg/attack_01.png"),200,200,false,true));
+        this.getChildren().add(hit);
+        hit.setLayoutX(10);
+        hit.setLayoutY(-20);
+        FadeTransition fadeOut = new FadeTransition(Duration.seconds(0.2), hit);
+        fadeOut.setFromValue(1.0);  // 完全可见
+        fadeOut.setToValue(0.0);    // 完全透明
+        fadeOut.setCycleCount(1);   // 只播放一次
+        fadeOut.setOnFinished(ex->{
+            if(this.getChildren().contains(hit))
+                this.getChildren().remove(hit);
+        });
+        // 启动动画
+        fadeOut.play();
     }
+
+    public void Heroattack2(){
+
+        TranslateTransition moveForward = new TranslateTransition(Duration.millis(200), this);
+        moveForward.setByX(200);
+        moveForward.play();
+        moveForward.setOnFinished(event -> {
+            TranslateTransition moveBackward = new TranslateTransition(Duration.millis(500), this);
+            moveBackward.setByX(-200);
+            moveBackward.play();
+        });
+
+        ImageView hit2 = new ImageView(new Image(getClass().getResourceAsStream("/com/zy/card/res/Image/EffectImg/attack_02.png"),200,200,false,true));
+        this.getChildren().add(hit2);
+        hit2.setLayoutX(10);
+        hit2.setLayoutY(-20);
+        FadeTransition fadeOut = new FadeTransition(Duration.seconds(0.2), hit2);
+        fadeOut.setFromValue(1.0);  // 完全可见
+        fadeOut.setToValue(0.0);    // 完全透明
+        fadeOut.setCycleCount(1);   // 只播放一次
+        fadeOut.setOnFinished(ex->{
+            if(this.getChildren().contains(hit2))
+                this.getChildren().remove(hit2);
+        });
+        // 启动动画
+        fadeOut.play();
+    }
+
+    public void HeroDenfend(){
+        //这里是防御的动画
+        ImageView Def = new ImageView(new Image(getClass().getResourceAsStream("/com/zy/card/res/Image/EffectImg/circle_02.png"),200,200,false,true));
+        this.getChildren().add(Def);
+        Def.setLayoutX(-60);
+        Def.setLayoutY(-50);
+        FadeTransition fadeOut = new FadeTransition(Duration.seconds(2), Def);
+        fadeOut.setFromValue(1.0);  // 完全可见
+        fadeOut.setToValue(0.0);    // 完全透明
+        fadeOut.setCycleCount(1);   // 只播放一次
+        fadeOut.setOnFinished(ex->{
+            if(this.getChildren().contains(Def))
+                this.getChildren().remove(Def);
+        });
+        // 启动动画
+        fadeOut.play();
+    }
+
+    public void HeroFit(){
+        //这里是治疗的动画
+        ImageView fit = new ImageView(new Image(getClass().getResourceAsStream("/com/zy/card/res/Image/EffectImg/fit.png"),200,200,false,true));
+        this.getChildren().add(fit);
+        fit.setLayoutX(-60);
+        fit.setLayoutY(-40);
+        FadeTransition fadeOut = new FadeTransition(Duration.seconds(2), fit);
+        fadeOut.setFromValue(1.0);  // 完全可见
+        fadeOut.setToValue(0.0);    // 完全透明
+        fadeOut.setCycleCount(1);   // 只播放一次
+        fadeOut.setOnFinished(ex->{
+            if(this.getChildren().contains(fit))
+                this.getChildren().remove(fit);
+        });
+        // 启动动画
+        fadeOut.play();
+
+    }
+
+
     public void draw_hpbar(){
         double ratio = (double) HP / MAX_HP;
         double barWidth = ratio * HpBar.getWidth();
@@ -153,6 +241,11 @@ public class Hero extends AnchorPane {
     }
 
     public  int getHP(){return HP;}
+
+    public int getMAX_HP() {
+        return MAX_HP;
+    }
+
     public void setMAX_HP(int num){
         MAX_HP = num;
     }
@@ -201,6 +294,24 @@ public class Hero extends AnchorPane {
     }
 
     public void GotHit(int value){
+        //受到攻击的特效
+        ImageView gothit = new ImageView(new Image(getClass().getResourceAsStream("/com/zy/card/res/Image/EffectImg/scratch_01.png"),200,200,false,true));
+        this.getChildren().add(gothit);
+        gothit.setLayoutX(-60);
+        gothit.setLayoutY(-40);
+        FadeTransition fadeOut = new FadeTransition(Duration.seconds(0.5), gothit);
+        fadeOut.setFromValue(1.0);  // 完全可见
+        fadeOut.setToValue(0.0);    // 完全透明
+        fadeOut.setCycleCount(1);   // 只播放一次
+        fadeOut.setOnFinished(e->{
+            if(this.getChildren().contains(gothit))
+                this.getChildren().remove(gothit);
+        });
+        // 启动动画
+        fadeOut.play();
+
+
+
         if(shield-value > 0)
         {
             setShield(shield-value);
@@ -210,19 +321,36 @@ public class Hero extends AnchorPane {
     }
 
     public void dead(){
+        System.out.println("hero dead");
         FadeTransition fadeOut = new FadeTransition(Duration.seconds(1), this);
         fadeOut.setFromValue(1.0);  // 完全可见
         fadeOut.setToValue(0.0);    // 完全透明
         fadeOut.setCycleCount(1);   // 只播放一次
         // 启动动画
         fadeOut.play();
+        Obj.isInBattle = false;
         PauseTransition delay = new PauseTransition(Duration.seconds(1));
         // 在等待时间结束后执行逻辑代码
         delay.setOnFinished(e->{
-            Obj.FightStage.close();
+            FightStage.close();
+            System.out.println("fightstage close");
+            MapStage.close();
+            //打开战败页面
+            FXMLLoader fxmlLoader = new FXMLLoader(LoserController.class.getResource("Lose-view.fxml"));
+            AnchorPane root = null;
+            try {
+                root = fxmlLoader.load();
+                Scene scene = new Scene(root);
+                Stage LoseStage= new Stage();
+                LoseStage.setResizable(false);
+                LoseStage.setScene(scene);
+                LoseStage.show();
 
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
         });
-
+        delay.play();
 
     }
 }

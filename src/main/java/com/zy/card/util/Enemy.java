@@ -1,11 +1,11 @@
 package com.zy.card.util;
 
+import com.zy.card.LoserController;
 import com.zy.card.Obj;
-import javafx.animation.AnimationTimer;
-import javafx.animation.FadeTransition;
-import javafx.animation.ScaleTransition;
-import javafx.animation.TranslateTransition;
+import javafx.animation.*;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.effect.BlendMode;
@@ -15,9 +15,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.IOException;
 import java.util.ArrayList;
+
+import static com.zy.card.Obj.*;
 
 public class Enemy extends AnchorPane {
 
@@ -25,6 +29,8 @@ public class Enemy extends AnchorPane {
     public ArrayList<String> buffList = new ArrayList<>();
 
     private String intention = "Attack";
+
+    private String name;
     private  int HP;
     private boolean chosen = false;
     private boolean dead = false;
@@ -45,6 +51,7 @@ public class Enemy extends AnchorPane {
 
 
     public Enemy(String name,int maxhp){
+        this.name = name;
 //        String imagePath = "/com/zy/card/res/Image/Character/monster_"+name+".png";
 //        Image backgroundImage = new Image(getClass().getResourceAsStream(imagePath));
 //        ImageView imageView = new ImageView(backgroundImage);
@@ -110,6 +117,19 @@ public class Enemy extends AnchorPane {
 
     }
 
+    public void EnemyAttack(){
+        //这里是敌人攻击的动画
+        TranslateTransition moveForward = new TranslateTransition(Duration.millis(200), this);
+        moveForward.setByX(-200);
+        moveForward.play();
+        moveForward.setOnFinished(event -> {
+            TranslateTransition moveBackward = new TranslateTransition(Duration.millis(500), this);
+            moveBackward.setByX(200);
+            moveBackward.play();
+        });
+
+    }
+
     public void draw_hpbar(){
         double ratio = (double) HP / MAX_HP;
         double barWidth = ratio * HpBar.getWidth();
@@ -118,6 +138,18 @@ public class Enemy extends AnchorPane {
     }
     public int getHP() {
         return HP;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getMAX_HP() {
+        return MAX_HP;
+    }
+
+    public int getStrength() {
+        return strength;
     }
 
     public int getAttack() {
@@ -168,6 +200,10 @@ public class Enemy extends AnchorPane {
         strength=max_strength;
     }
 
+    public void onfire(){
+        HP-=3;
+    }
+
 
 
     public double attack_the_player_1(double attack){
@@ -193,57 +229,97 @@ public class Enemy extends AnchorPane {
     public void finalbuff(){
         for (String element : buffList) {
             switch (element) {
-                case "乏力"://力量减半
+                case "乏力": {//力量减半
                     fatigue();
                     break;
-                case "重创"://扣除一半最大生命值
+                }
+                case "重创": {//扣除一半最大生命值
                     maul_heavily();
                     break;
-                case "力量充沛":
+                }
+                case "力量充沛": {
                     abundant();//回复到最大力量值
                     break;
-                case "重伤":
+                }
+                case "重伤": {
                     Maximum_bleeding();//扣一半血
                     break;
-                default:
+                }
+                case "点燃":{
+                    onfire();
+                }
+                default: {
                     break;
+                }
             }
         }
-        buffList.clear();
     }
 
     public void Action(){
         switch (intention){
             case "Attack":{
-                intention = "Defence";
+                EnemyAttack();
+//                intention = "Defence";
                 Obj.allObjects.getHero().GotHit(attack);
                 if(Obj.allObjects.getHero().getHP()<=0)
                     Obj.allObjects.getHero().dead();
                 break;
             }
-            case "Defence":{
-                intention = "Attack";
-                setShield(10);
-                break;
-            }
+//            case "Defence":{
+//                intention = "Attack";
+//                setShield(10);
+//                break;
+//            }
         }
     }
 
     public void GotHit(int value){
-        if(shield-value > 0)
-        {
-            setShield(shield-value);
-        }else{
-            setHP(HP+(shield-value));
-        }
+        setHP(getHP()-value);
+    }
+
+    public void GotDeBuff(){
+        ImageView Def = new ImageView(new Image(getClass().getResourceAsStream("/com/zy/card/res/Image/EffectImg/Debuff.png"),200,200,false,true));
+        this.getChildren().add(Def);
+        Def.setLayoutX(-30);
+        Def.setLayoutY(-50);
+        FadeTransition fadeOut = new FadeTransition(Duration.seconds(1), Def);
+        fadeOut.setFromValue(1.0);  // 完全可见
+        fadeOut.setToValue(0.0);    // 完全透明
+        fadeOut.setCycleCount(1);   // 只播放一次
+        fadeOut.setOnFinished(ex->{
+            if(this.getChildren().contains(Def))
+                this.getChildren().remove(Def);
+        });
+        // 启动动画
+        fadeOut.play();
     }
 
     public void dead(){
+        System.out.println("enemy dead");
         FadeTransition fadeOut = new FadeTransition(Duration.seconds(1), this);
         fadeOut.setFromValue(1.0);  // 完全可见
         fadeOut.setToValue(0.0);    // 完全透明
         fadeOut.setCycleCount(1);   // 只播放一次
         // 启动动画
         fadeOut.play();
+
+        PauseTransition delay = new PauseTransition(Duration.seconds(1));
+        // 在等待时间结束后执行逻辑代码
+        delay.setOnFinished(e->{
+            if(name=="110") {
+                System.out.println("fightstage close");
+                FightStage.close();
+                FightStage = null;
+                isInBattle = false;
+                allObjects.GameWin();
+            }else {
+                System.out.println("fightstage close");
+                FightStage.close();
+                FightStage = null;
+                isInBattle = false;
+                MapStage.show();
+            }
+        });
+        delay.play();
     }
 }

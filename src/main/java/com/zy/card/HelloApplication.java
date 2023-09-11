@@ -29,6 +29,7 @@ public class HelloApplication extends Application {
         stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
+        Obj.MenuStage = stage;
         Sound_music.setSelected(true);
         Background_music.setSelected(true);
     }

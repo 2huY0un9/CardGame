@@ -55,21 +55,27 @@ public class MapController implements Initializable {
     private Image CoinFrameImage = new Image(getClass().getResourceAsStream("res/Image/CoinFrame.png"),80,30,false,true);
     private Image CoinImage = new Image(getClass().getResourceAsStream("res/Image/Coin.png"),30,30,false,true);
     private Image BackToBtImg = new Image(getClass().getResourceAsStream("res/Image/BackToBattleButton.png"),120,40,false,true);
-    private EventHandler<MouseEvent> ClickMonsterEvent = new EventHandler<MouseEvent>() {
+
+    private EventHandler<MouseEvent> ClickBossEvent = new EventHandler<MouseEvent>() {
         @Override
-        public void handle(MouseEvent event) {
-            System.out.println("a monster has been clicked");
-            MyImageView BeClicked = (MyImageView) event.getSource();
+        public void handle(MouseEvent mouseEvent) {
+            System.out.println("a Boss has been clicked");
+            allObjects.getHandCardsArray().clear();
+            allObjects.DrawBoss();
+            allObjects.setActionPoint(allObjects.getMax_ActionPoint());
+            MyImageView BeClicked = (MyImageView) mouseEvent.getSource();
             List<Integer> to = graph.get(BeClicked.getMark());
             for (MyImageView i : IconArray) {
                 if(to.contains(i.getMark()))
                 {
                     i.setMouseTransparent(false);
+                    i.setClickable(true);
                     i.setOpacity(1);
                 }
                 if(BeClicked.getFloor()==i.getFloor())
                 {
                     i.setMouseTransparent(true);
+                    i.setClickable(false);
                     if(i!=BeClicked)
                         i.setOpacity(0.5);
                 }
@@ -94,10 +100,78 @@ public class MapController implements Initializable {
                     throw new RuntimeException(e);
                 }
 
-
-                MainBack.getChildren().add(BackToBattle);
+                if(!MainBack.getChildren().contains(BackToBattle)) {
+                    MainBack.getChildren().add(BackToBattle);
+                }
             }
             System.out.println(isInBattle);
+            Stage stage = (Stage) MainBack.getScene().getWindow();
+            stage.setOnShown(e->{
+                System.out.println("MapShown");
+                if(!isInBattle){
+                    if(MainBack.getChildren().contains(BackToBattle))
+                        MainBack.getChildren().remove(BackToBattle);
+                }
+            });
+        }
+    };
+    private EventHandler<MouseEvent> ClickMonsterEvent = new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent event) {
+            System.out.println("a monster has been clicked");
+            allObjects.getHandCardsArray().clear();
+            allObjects.DrawEnemy();
+            allObjects.setActionPoint(allObjects.getMax_ActionPoint());
+            MyImageView BeClicked = (MyImageView) event.getSource();
+            List<Integer> to = graph.get(BeClicked.getMark());
+            for (MyImageView i : IconArray) {
+                if(to.contains(i.getMark()))
+                {
+                    i.setMouseTransparent(false);
+                    i.setClickable(true);
+                    i.setOpacity(1);
+                }
+                if(BeClicked.getFloor()==i.getFloor())
+                {
+                    i.setMouseTransparent(true);
+                    i.setClickable(false);
+                    if(i!=BeClicked)
+                        i.setOpacity(0.5);
+                }
+            }
+            floor = BeClicked.getFloor();
+            if(!isInBattle){
+                isInBattle = true;
+                FXMLLoader fxmlLoader = new FXMLLoader(LoginController.class.getResource("fight-view.fxml"));
+
+                AnchorPane root = null;
+                try {
+                    root = fxmlLoader.load();
+                    Scene scene = new Scene(root);
+                    FightStage = new Stage();
+                    FightStage.setScene(scene);
+                    FightStage.setResizable(false);
+                    FightStage.show();
+
+                    Stage originalStage = (Stage) MainBack.getScene().getWindow();
+                    originalStage.hide();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
+                if(!MainBack.getChildren().contains(BackToBattle)) {
+                    MainBack.getChildren().add(BackToBattle);
+                }
+            }
+            System.out.println(isInBattle);
+            Stage stage = (Stage) MainBack.getScene().getWindow();
+            stage.setOnShown(e->{
+                System.out.println("MapShown");
+                if(!isInBattle){
+                    if(MainBack.getChildren().contains(BackToBattle))
+                        MainBack.getChildren().remove(BackToBattle);
+                }
+            });
 
         }
     };
@@ -107,18 +181,33 @@ public class MapController implements Initializable {
             System.out.println("a restpoint has been clicked");
             MyImageView BeClicked = (MyImageView) event.getSource();
             List<Integer> to = graph.get(BeClicked.getMark());
+
+
             for (MyImageView i : IconArray) {
                 if(to.contains(i.getMark()))
                 {
                     i.setMouseTransparent(false);
+                    i.setClickable(true);
                     i.setOpacity(1);
                 }
                 if(BeClicked.getFloor()==i.getFloor())
                 {
                     i.setMouseTransparent(true);
+                    i.setClickable(false);
                     if(i!=BeClicked)
                         i.setOpacity(0.5);
                 }
+            }
+
+            if (BeClicked.getMark()>=12&&BeClicked.getMark()<=14)
+            {
+                System.out.println("succ");
+                BossIcon.setClickable(true);
+                BossIcon.able();
+                BossIcon.setOpacity(1.0);
+            }else
+            {
+                System.out.println("fall");
             }
 
             FXMLLoader restfxmlLoader = new FXMLLoader(LoginController.class.getResource("inhabit-view.fxml"));
@@ -150,11 +239,13 @@ public class MapController implements Initializable {
                 if(to.contains(i.getMark()))
                 {
                     i.setMouseTransparent(false);
+                    i.setClickable(true);
                     i.setOpacity(1);
                 }
                 if(BeClicked.getFloor()==i.getFloor())
                 {
                     i.setMouseTransparent(true);
+                    i.setClickable(false);
                     if(i!=BeClicked)
                         i.setOpacity(0.5);
                 }
@@ -234,7 +325,9 @@ public class MapController implements Initializable {
             BossIcon.setLayoutX(210);
             BossIcon.setFitHeight(200);
             BossIcon.setFitWidth(240);
-            BossIcon.setOnMouseClicked(ClickMonsterEvent);
+            BossIcon.setOnMouseClicked(ClickBossEvent);
+
+
 
             ButtonSetting.setOnMouseEntered(mouseEvent -> {
                 ButtonSetting.setEffect(new DropShadow());
@@ -295,6 +388,14 @@ public class MapController implements Initializable {
                         {
                             i.Disable();
                         }
+                    }else {
+                        for (MyImageView i:IconArray)
+                        {
+                            if (i.isClickable()) {
+                                i.able();
+                                i.setOpacity(1.0);
+                            }
+                        }
                     }
                 }
             };
@@ -340,6 +441,7 @@ public class MapController implements Initializable {
                 if (i==4) {
                     icon.setOpacity(1);
                     icon.setMouseTransparent(false);
+                    icon.setClickable(true);
                 }
                 icon.setMark(num[j][i]);
                 icon.setFitHeight(40);

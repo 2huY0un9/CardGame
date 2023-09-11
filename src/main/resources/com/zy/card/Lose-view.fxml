@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane fx:id="LosePane" prefHeight="540.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.zy.card.LoserController">
+   <children>
+      <Label layoutX="362.0" layoutY="117.0" prefHeight="89.0" prefWidth="236.0" text=" DEFEAT" textFill="#ff8905">
+         <font>
+            <Font size="58.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>
